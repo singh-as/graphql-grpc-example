@@ -1,0 +1,31 @@
+type Query {
+    viewPlans(planCodes : [String]): [Plan!]
+}
+
+type Plan {
+    code:       String!,
+    name:       String!,
+    benefitType:String!,
+    carrier:    String!,
+    cost:      PlanCost!,
+    attributes: [PlanAttribute!],
+    document:  Document
+}
+
+type PlanAttribute {
+    name:               String!,
+    value:              String!
+}
+
+type PlanCost {
+    planCode:       String!,
+    emplCovrgRate:  Float!,
+    emplrCovrgRate: Float!
+}
+
+type Document {
+    title: String!,
+    description: String!,
+    path: String!
+}
+

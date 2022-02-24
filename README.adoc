@@ -1,0 +1,38 @@
+:hardbreaks-option:
+
+*Pre-requisite*
+Java 8 or higher
+Docker
+
+
+
+*Steps to build artifacts, create images and run the application*
+./docker-build.sh
+./start-app.sh
+http://localhost:8080/graphiql
+
+*Sample*
+{
+    viewPlans(planCodes: ["004S2C"]) {
+        code
+        name
+        benefitType
+        carrier
+        cost {
+            emplCovrgRate
+            emplrCovrgRate
+        }
+        document {
+            description
+            path
+        }
+        attributes {
+            name
+            value
+        }
+    }
+}
+
+
+*Stop the application*
+./stop-app.sh

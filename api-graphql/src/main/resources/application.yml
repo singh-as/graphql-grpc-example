@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: api-graphql
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password: password
+  jpa:
+    database: h2
+    show-sql: false
+    repositories:
+      bootstrap-mode: default
+    hibernate:
+      ddl-auto: none
+
+grpc:
+  client:
+    cost-service:
+      #address: 'static://0.0.0.0:9090'
+      address: 'dns:/cost-service:9090'
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: plaintext
+
+    document-service:
+      #address: 'static://0.0.0.0:9091'
+      address: 'dns:/document-service:9090'
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: plaintext

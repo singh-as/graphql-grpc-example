@@ -1,0 +1,48 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot'
+    id 'io.spring.dependency-management'
+}
+
+group = 'com.example.graphql-grpc'
+version = '0.1'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+    implementation project(':common-utils')
+    implementation project(':document-svc-definition')
+
+    sourceSets {
+        main {
+            java {
+                srcDirs '../document-svc-definition/build/generated/source/proto/main/grpc'
+                srcDirs '../document-svc-definition/build/generated/source/proto/main/java'
+            }
+        }
+    }
+
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'net.devh:grpc-spring-boot-starter:2.11.0.RELEASE'
+    implementation 'com.google.protobuf:protobuf-java-util:3.17.2'
+    implementation 'com.example.graphql-grpc:document-svc-definition:0.1'
+
+    compileOnly 'org.projectlombok:lombok'
+    runtimeOnly 'com.h2database:h2'
+
+
+    annotationProcessor 'org.projectlombok:lombok'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+
+}
+
+test {
+    useJUnitPlatform()
+}

@@ -1,0 +1,9 @@
+rootProject.name = 'graphql-grpc-sample'
+
+include 'common-utils'
+include 'document-svc-definition'
+include 'cost-svc-definition'
+include 'document-service'
+include 'cost-service'
+include 'api-graphql'
+

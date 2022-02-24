@@ -1,0 +1,17 @@
+*.DS_Store
+*.sw?
+.#*
+*#
+*~
+.classpath
+.project
+.settings
+bin
+build
+target
+*.sublime-*
+/scratch
+.gradle
+README.html
+.idea
+*.iml

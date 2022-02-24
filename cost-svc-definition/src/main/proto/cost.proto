@@ -1,0 +1,20 @@
+syntax = "proto3";
+option java_multiple_files = true;
+package com.definition.grpc.cost;
+
+message PlanCostRequest {
+  repeated string planCode = 1;
+}
+
+message PlanCostResponse {
+  repeated PlanCost cost = 1;
+}
+message PlanCost {
+  string planCode = 1;
+  float emplCovrgRate = 2;
+  float emplrCovrgRate = 3;
+}
+
+service PlanCostService {
+  rpc getPlanCost(PlanCostRequest) returns (PlanCostResponse);
+}
