@@ -1,0 +1,27 @@
+version: "3.8"
+services:
+  cost-service:
+    labels:
+      app: graphql-grpc
+    build:
+      labels:
+        app: graphql-grpc
+      context: ./cost-service
+
+  document-service:
+    labels:
+      app: graphql-grpc
+    build:
+      labels:
+        app: graphql-grpc
+      context: ./document-service
+
+  api-graphql:
+    labels:
+      app: graphql-grpc
+    build:
+      labels:
+        app: graphql-grpc
+      context: ./api-graphql
+    ports:
+      - "8080:8080"
