@@ -9,18 +9,17 @@ version = '0.1'
 
 repositories {
     mavenCentral()
-    mavenLocal()
 }
 
 dependencies {
 
     implementation 'com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter:3.11.0'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.11.1'
     implementation 'net.devh:grpc-client-spring-boot-starter:2.12.0.RELEASE'
     implementation 'com.google.protobuf:protobuf-java-util:3.17.2'
     implementation 'com.netflix.graphql.dgs:graphql-dgs-spring-boot-micrometer'
+    implementation 'com.netflix.graphql.dgs:graphql-dgs:3.11.0'
 
     implementation project(':cost-svc-definition')
     implementation project(':document-svc-definition')
@@ -36,16 +35,13 @@ dependencies {
         }
     }
 
-    compileOnly 'org.projectlombok:lombok'
 
+    runtimeOnly 'com.h2database:h2'
+
+    compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
-    implementation 'com.netflix.graphql.dgs:graphql-dgs:3.11.0'
-
-    runtimeOnly 'com.h2database:h2'
 }
 
 test {
