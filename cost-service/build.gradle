@@ -4,12 +4,6 @@ plugins {
     id 'io.spring.dependency-management'
 }
 
-group = 'com.example.graphql-grpc'
-version = '0.1'
-
-repositories {
-    mavenCentral()
-}
 
 dependencies {
 
