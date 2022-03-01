@@ -6,7 +6,7 @@
 :master-branch: https://github.com/singh-as/graphql-grpc-example.git
 :project-name: graphql-grpc-example
 
-This example uses {netflix-graphql}[Netflix DGS GraphQl] and for {grpc}[gRPC] for inter-service communication.
+This example uses {netflix-graphql}[Netflix DGS GraphQL] for data query and {grpc}[gRPC] for inter-service communication.
 
 == Pre-requisite
 
