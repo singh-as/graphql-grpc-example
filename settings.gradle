@@ -1,4 +1,4 @@
-rootProject.name = 'graphql-grpc-sample'
+rootProject.name = 'graphql-grpc-example'
 
 include 'common-utils'
 include 'document-svc-definition'

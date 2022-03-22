@@ -16,16 +16,59 @@ spring:
 
 grpc:
   client:
-    cost-service:
+    costSvc:
       #address: 'static://0.0.0.0:9090'
       address: 'dns:/cost-service:9090'
       enableKeepAlive: true
       keepAliveWithoutCalls: true
       negotiationType: plaintext
 
-    document-service:
+    documentSvc:
       #address: 'static://0.0.0.0:9091'
       address: 'dns:/document-service:9090'
       enableKeepAlive: true
       keepAliveWithoutCalls: true
       negotiationType: plaintext
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info, health, metrics
+  metrics:
+    export:
+      atlas:
+        enabled: false
+
+## https://resilience4j.readme.io/docs/retry
+resilience4j.retry:
+  instances:
+    costSvc:
+      maxRetryAttempts: 2
+      waitDurations: 500ms
+
+## https://resilience4j.readme.io/docs/circuitbreaker
+resilience4j.circuitbreaker:
+  configs:
+    default:
+      registerHealthIndicator: true
+      slidingWindowSize: 5
+      minimumNumberOfCalls: 3
+      permittedNumberOfCallsInHalfOpenState: 3
+      automaticTransitionFromOpenToHalfOpenEnabled: true
+      waitDurationInOpenState: 5s
+      failureRateThreshold: 50
+      eventConsumerBufferSize: 10
+  instances:
+    documentSvc:
+      baseConfig: default
+    costSvc:
+      registerHealthIndicator: true
+      slidingWindowType: TIME_BASED
+      slidingWindowSize: 5
+      minimumNumberOfCalls: 3
+      permittedNumberOfCallsInHalfOpenState: 2
+      automaticTransitionFromOpenToHalfOpenEnabled: true
+      waitDurationInOpenState: 5s
+      failureRateThreshold: 50
+      eventConsumerBufferSize: 10

@@ -9,11 +9,18 @@ dependencies {
 
     implementation 'com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter:3.11.0'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.11.1'
     implementation 'net.devh:grpc-client-spring-boot-starter:2.12.0.RELEASE'
     implementation 'com.google.protobuf:protobuf-java-util:3.17.2'
     implementation 'com.netflix.graphql.dgs:graphql-dgs-spring-boot-micrometer'
     implementation 'com.netflix.graphql.dgs:graphql-dgs:3.11.0'
+    implementation('io.github.resilience4j:resilience4j-spring-boot2:1.7.1') {
+        exclude group: 'io.github.resilience4j', module: 'resilience4j-retry'
+        exclude group: 'io.github.resilience4j', module: 'resilience4j-ratelimiter'
+        exclude group: 'io.github.resilience4j', module: 'resilience4j-timelimiter'
+    }
+
 
     implementation project(':cost-svc-definition')
     implementation project(':document-svc-definition')
@@ -40,4 +47,8 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+bootRun {
+    jvmArgs=["-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=32323"]
 }

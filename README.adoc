@@ -1,12 +1,17 @@
 :grpc: https://grpc.io/
 :netflix-graphql: https://netflix.github.io/dgs/
+:resilience4j: https://resilience4j.readme.io/
 :icons: font
 :source-highlighter: prettify
 :project_id: graphql-grpc-example
 :master-branch: https://github.com/singh-as/graphql-grpc-example.git
 :project-name: graphql-grpc-example
 
-This example uses {netflix-graphql}[Netflix DGS GraphQL] for data query and {grpc}[gRPC] for inter-service communication.
+== This example uses
+- {netflix-graphql}[Netflix DGS GraphQL] for data query,
+- {grpc}[gRPC] for inter-service communication,
+- {resilience4j}[Resilience4j] fault tolerance library
+
 
 == Pre-requisite
 
@@ -66,7 +71,7 @@ docker-compose stop
 [source,jsonpath]
 ----
 Sample request payload, see below
-
+// more plan codes: "002IJ7", "000EGW"
 {
     viewPlans(planCodes: ["004S2C"]) {
         code
@@ -104,4 +109,12 @@ docker-compose rm
 
 # Delete images
 docker rmi $(docker images --filter "label=app=graphql-grpc" -q)
+
+# Metrics
+http://localhost:8080/actuator/metrics
+
+http://localhost:8080/actuator/metrics/resilience4j.circuitbreaker.calls
+
+http://localhost:8080/actuator/metrics/resilience4j.circuitbreaker.not.permitted.calls
+
 ----
