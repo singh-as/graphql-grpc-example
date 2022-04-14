@@ -6,6 +6,8 @@
 :project_id: graphql-grpc-example
 :master-branch: https://github.com/singh-as/graphql-grpc-example.git
 :project-name: graphql-grpc-example
+:k3s: https://k3s.io/
+:k3d: https://k3d.io/
 
 == This example uses
 - {netflix-graphql}[Netflix DGS GraphQL] for data query,
@@ -56,7 +58,7 @@ docker images --filter "label=app=graphql-grpc"
 ----
 image::images/docker-images.png[]
 
-** Run the Application
+** Run the Application - Docker compose
 [subs="attributes"]
 ----
 docker-compose up
@@ -94,6 +96,72 @@ Sample request payload, see below
 }
 ----
 
+** Run the Application - Kubernetes
+[subs="attributes"]
+----
+# Create namespace
+kubectl create ns graphql-grpc-ns
+
+kubectl apply -f kubernetes/api-graphql-deployment.yaml
+kubectl apply -f kubernetes/graphql-grpc-ingress.yaml  ## Assuming Ingress Controller is installed
+kubectl apply -f kubernetes/api-document-deployment.yaml
+kubectl apply -f kubernetes/api-cost-deployment.yaml
+
+
+# Clean-up
+kubectl delete ns graphql-grpc-ns
+----
+
+** Access application - http://localhost/graphiql
+
+** Steps to install & run Kubernetes in local
+[subs="attributes"]
+----
+Few options to choose from to run local Kubernetes cluster
+- Minikube
+- kind
+- k3s
+- MicroK8s
+
+I picked k3s and k3d. k3d is a wrapper to run k3s. On first run it will download all the required k3s components. We don't have to explicitly install k3s.
+
+Install k3d  - https://k3d.io/v5.4.1/#installation
+Install helm - https://helm.sh/
+
+Install Ingress Controller like Traefik, Nginx - I chose Traefik, k3s comes with older verion Traefik
+
+# Steps to install Traefik
+helm repo add traefik https://containous.github.io/traefik-helm-chart/
+helm repo update
+
+# Create cluster with single node and older version traefik disabled
+# Follow k3d documentation to run multiple nodes
+k3d cluster create <cluster-name> --api-port 127.0.0.1:6443 -p 80:80@loadbalancer -p 443:443@loadbalancer --k3s-arg "--disable=traefik@server:0"
+
+# Install traefik on the cluster
+helm install traefik traefik/traefik
+
+# Verfiy traefik installation
+kubectl get po
+
+# Steps to access Traefik on localhost
+kubectl port-forward $(kubectl get pods --selector "app.kubernetes.io/name=traefik" --output=name) 9000:9000
+
+http://localhost:9000/dashboard/#
+
+You all set to deploy the application.
+
+Few helpful commands:
+
+# Will show all the objects under passed in namespace like pod, deployment, replicas, service
+kubectl get all -n graphql-grpc-nc
+
+# To check the ingress
+kubectl get ingress -n graphql-grpc-nc
+
+# Command to stream pod logs to stdout
+kubectl logs -f <pod-name> -n graphql-grpc-ns
+----
 
 ** Miscellaneous
 [subs="attributes"]
