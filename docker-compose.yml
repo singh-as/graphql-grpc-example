@@ -7,6 +7,7 @@ services:
       labels:
         app: graphql-grpc
       context: ./cost-service
+    image: amitsingh00/cost-service
 
   document-service:
     labels:
@@ -15,6 +16,7 @@ services:
       labels:
         app: graphql-grpc
       context: ./document-service
+    image: amitsingh00/document-service
 
   api-graphql:
     labels:
@@ -23,5 +25,6 @@ services:
       labels:
         app: graphql-grpc
       context: ./api-graphql
+    image: amitsingh00/api-graphql
     ports:
       - "8080:8080"

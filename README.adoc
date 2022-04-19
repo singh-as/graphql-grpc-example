@@ -1,6 +1,8 @@
 :grpc: https://grpc.io/
 :netflix-graphql: https://netflix.github.io/dgs/
 :resilience4j: https://resilience4j.readme.io/
+:opentelemetry: https://opentelemetry.io/
+:jaegar: https://www.jaegertracing.io/
 :icons: font
 :source-highlighter: prettify
 :project_id: graphql-grpc-example
@@ -13,6 +15,8 @@
 - {netflix-graphql}[Netflix DGS GraphQL] for data query,
 - {grpc}[gRPC] for inter-service communication,
 - {resilience4j}[Resilience4j] fault tolerance library
+- {opentelemetry}[OpenTelemetry] to collect telemetry data
+- {jaegar}[Jaegar] distributed tracing and observability
 
 
 == Pre-requisite
@@ -106,6 +110,7 @@ kubectl apply -f kubernetes/api-graphql-deployment.yaml
 kubectl apply -f kubernetes/graphql-grpc-ingress.yaml  ## Assuming Ingress Controller is installed
 kubectl apply -f kubernetes/api-document-deployment.yaml
 kubectl apply -f kubernetes/api-cost-deployment.yaml
+kubectl apply -f kubernetes/jaeger-deployment.yaml  ## create Jaegar instance - Assuning Jaegar operator is installed
 
 
 # Clean-up
@@ -128,7 +133,20 @@ I picked k3s and k3d. k3d is a wrapper to run k3s. On first run it will download
 Install k3d  - https://k3d.io/v5.4.1/#installation
 Install helm - https://helm.sh/
 
-Install Ingress Controller like Traefik, Nginx - I chose Traefik, k3s comes with older verion Traefik
+Install Cert manager
+## Below commands are picked from - https://magda.io/docs/how-to-setup-https-to-local-cluster.html
+
+# Add Helm Chart
+helm repo add jetstack https://charts.jetstack.io
+helm repo update
+
+# Create namespace and install
+kubectl create ns cert-manager
+helm install cert-manager jetstack/cert-manager --namespace cert-manager --version v1.8.0
+kubectl apply -f https://gist.githubusercontent.com/t83714/51440e2ed212991655959f45d8d037cc/raw/7b16949f95e2dd61e522e247749d77bc697fd63c/selfsigned-issuer.yaml
+
+
+## Install Ingress Controller like Traefik, Nginx - I chose Traefik, k3s comes with older verion Traefik
 
 # Steps to install Traefik
 helm repo add traefik https://containous.github.io/traefik-helm-chart/
@@ -149,9 +167,23 @@ kubectl port-forward $(kubectl get pods --selector "app.kubernetes.io/name=traef
 
 http://localhost:9000/dashboard/#
 
+
+## Install Jaegar tracing - https://www.jaegertracing.io/docs/1.19/operator/
+# Create namespace and add jaegar operator
+kubectl create namespace observability
+kubectl create -f https://github.com/jaegertracing/jaeger-operator/releases/download/v1.33.0/jaeger-operator.yaml -n observability
+
+kubectl port-forward $(kubectl get pods -l=app="jaeger" -o name -n graphql-grpc-ns) 16686:16686 -n graphql-grpc-ns
+
+# Jaegar UI
+http://localhost:16686/
+
 You all set to deploy the application.
 
 Few helpful commands:
+
+# Command to set the namespace in curret context - will save you from adding namespace to all the commands
+kubectl config set-context --current --namespace=graphql-grpc-ns
 
 # Will show all the objects under passed in namespace like pod, deployment, replicas, service
 kubectl get all -n graphql-grpc-nc
